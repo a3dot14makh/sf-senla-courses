@@ -1,0 +1,20 @@
+Solution:
+1.Create auto-calculated field 'Age';
+IF(
+	MONTH(Birthday__c)  > MONTH(TODAY()),
+	(YEAR(TODAY())  -  YEAR(Birthday__c)) - 1, 
+	IF(
+		DAY(Birthday__c)  <= DAY(TODAY()), 
+		YEAR(TODAY())  -  YEAR(Birthday__c), 
+		(YEAR(TODAY())  -  YEAR(Birthday__c)) - 1
+		)
+)
+	
+2.Create field 'Upcoming Flights Count' - displays number of 'Upcoming' flights; 
+	Roll-Up Summary data type field. The Roll-Up Summary type COUNT with the Status EQUALS "Upcoming" filter criterion.
+	
+3.Create validation rule - не пускать на рейс (создание записи Flight), если не подходит по возрасту; 
+	Tourist__r.Age__c < Trip__r.Minimum_Age__c
+	
+4.Create validation rule - не пускать на рейс, если уже улетел;
+	Trip__r.Start_Date__c <= TODAY()
