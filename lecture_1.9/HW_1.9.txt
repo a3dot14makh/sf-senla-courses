@@ -8,11 +8,14 @@ Select Name, Age__c From Tourist__c WHERE Name = 'Джон'
 Select Name, Age__c From Tourist__c WHERE Age__c in (20, 22, 24)
 
 4. выбрать рейсы (дата старта, название) со списком туристов (имя, возраст)
-Select Trip__r.Name, Trip__r.Start_Date__c, Tourist__r.Name, Tourist__r.Age__c From Flight__c order by Trip__r.Name
+SELECT Name, Start_Date__c, (SELECT Tourist__r.Name, Tourist__r.Age__c FROM Flights__r)
+			FROM Trip__c 
+			ORDER BY Name
 
 5. выбрать туристов (имя, возраст) со списком рейсов (дата старта, название)
-Select Tourist__r.Name, Tourist__r.Age__c, Trip__r.Name, Trip__r.Start_Date__c From Flight__c order by Tourist__r.Name
-
+SELECT Name, Age__c, (SELECT Trip__r.Name, Trip__r.Start_Date__c FROM Flights__r )
+			FROM Tourist__c 
+			ORDER BY Name
 6. выбрать туристов (имя, возраст) которые не зарегистрировались ни на один рейс
 
 7. выбрать туристов (имя, возраст), у которых рейс стартовал в 2020 году.
