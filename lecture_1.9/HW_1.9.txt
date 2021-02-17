@@ -9,31 +9,31 @@ SELECT Name, Age__c FROM Tourist__c WHERE Age__c IN (20, 22, 24) ORDER BY Age__c
 
 4. выбрать рейсы (дата старта, название) со списком туристов (имя, возраст)
 SELECT Name, Start_Date__c, (SELECT Tourist__r.Name, Tourist__r.Age__c FROM Flights__r)
-		FROM Trip__c 
-		ORDER BY Name
+	FROM Trip__c 
+	ORDER BY Name
 
 5. выбрать туристов (имя, возраст) со списком рейсов (дата старта, название)
 SELECT Name, Age__c, (SELECT Trip__r.Name, Trip__r.Start_Date__c FROM Flights__r)
-		FROM Tourist__c 
-		ORDER BY Name
+	FROM Tourist__c 
+	ORDER BY Name
 
 6. выбрать туристов (имя, возраст) которые не зарегистрировались ни на один рейс
-SELECT Name, Age__c, (SELECT Trip__r.Name, Trip__r.Start_Date__c FROM Flights__r)
-		FROM Tourist__c
-		WHERE Id NOT IN (SELECT Tourist__c FROM Flight__c)
-		ORDER BY Name
+SELECT Name, Age__c
+	FROM Tourist__c
+	WHERE Id NOT IN (SELECT Tourist__c FROM Flight__c)
+	ORDER BY Name
 
 7. выбрать туристов (имя, возраст), у которых рейс стартовал в 2020 году.
-SELECT Name, Age__c, (SELECT Trip__r.Name, Trip__r.Start_Date__c FROM Flights__r )
-		FROM Tourist__c
-		WHERE Id  IN (SELECT Tourist__c FROM Flight__c WHERE CALENDAR_YEAR(Trip__r.Start_Date__c) = 2020 )
-		ORDER BY Name
+SELECT Name, Age__c
+	FROM Tourist__c
+	WHERE Id  IN (SELECT Tourist__c FROM Flight__c WHERE CALENDAR_YEAR(Trip__r.Start_Date__c) = 2020 )
+	ORDER BY Name
 
 8. выбрать рейсы (дата старта, название) за 2020 год, в которых есть туристы возрастом от 20 до 30 лет и имя туристов начинается с ‘B’(англ).
-SELECT Name, Start_Date__c, (SELECT Tourist__r.Name, Tourist__r.Age__c FROM Flights__r)
-		FROM Trip__c 
-		WHERE Id  IN (
-				SELECT Trip__c FROM Flight__c 
-				WHERE (CALENDAR_YEAR(Trip__r.Start_Date__c) = 2020 AND Tourist__r.Age__c >= 20 AND Tourist__r.Age__c <= 30 AND Tourist__r.Name like 'B%')
-				) 
-		ORDER BY Name
+SELECT Name, Start_Date__c
+	FROM Trip__c 
+	WHERE Id  IN (
+			SELECT Trip__c FROM Flight__c 
+			WHERE (CALENDAR_YEAR(Trip__r.Start_Date__c) = 2020 AND Tourist__r.Age__c >= 20 AND Tourist__r.Age__c <= 30 AND Tourist__r.Name like 'B%')
+			) 
+	ORDER BY Name
