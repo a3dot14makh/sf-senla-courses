@@ -1,0 +1,18 @@
+11. Создать массив чисел. Сформировать новый массив, состоящий из индексов четных чисел исходного массива и упорядоченный по возрастанию.
+
+Integer[] myInts = new Integer[]{50, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 0, 124};
+Integer[] evenNumbers = new Integer[0];
+Integer size = myInts.size() - 1;
+for (Integer i = 0; i <= size; i++) {
+    if (myInts[i] != 0 && math.mod(myInts[i], 2) == 0){
+        evenNumbers.add(i);
+    }
+}
+
+/*
+evenNumbers.add(4);
+evenNumbers.sort();
+for (Integer i : evenNumbers) {
+    System.debug(i);
+}
+*/
