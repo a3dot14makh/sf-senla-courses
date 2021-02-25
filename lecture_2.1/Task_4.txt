@@ -1,0 +1,8 @@
+4.Необходимо вывести на экран таблицу умножения на 3.
+
+Integer multipler = 1;
+do{
+    Integer sum = 3 * multipler;
+    System.debug('3 x ' + multipler + ' = ' + sum);
+    multipler++;
+} While(multipler < 11);
