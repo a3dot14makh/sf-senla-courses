@@ -1,0 +1,10 @@
+10. Есть строка слов(присвоенная вами переменной): вывести слова, стоящие на нечетных позициях.
+
+String str = 'The following are methods for String';
+String[] words = str.split(' ');
+Integer size = words.size() - 1;
+for (Integer i = 0; i <= size; i++) {
+    if (math.mod(i, 2) != 0){
+        System.debug(words[i]);
+    }
+}
