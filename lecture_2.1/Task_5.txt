@@ -1,0 +1,10 @@
+5.Напишите программу, которая суммирует все числа от 1 до введенного вами числа(присвоенного вами переменной).
+
+Integer myNumber = 6;
+Integer sum = 0;
+Integer i = myNumber;
+While(i != 0){
+    sum = sum + i;
+    i--;
+} 
+System.debug('The sum of numbers from 1 to ' + myNumber + ' is: ' + sum);
