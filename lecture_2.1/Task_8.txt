@@ -1,0 +1,21 @@
+8. Из созданного массива достать четные и нечетные числа.
+
+Integer[] myInts = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 0, 124};
+Integer[] evenNumbers = new Integer[0];
+Integer[] oddNumbers = new Integer[0];
+for (Integer i : myInts) {
+    if (i != 0 && math.mod(i, 2) == 0){
+        evenNumbers.add(i);
+    }else if(i != 0){
+        oddNumbers.add(i);
+    }
+}
+
+/*
+for (Integer i : evenNumbers) {
+    System.debug(i);
+}
+for (Integer i : oddNumbers) {
+    System.debug(i);
+}
+*/
