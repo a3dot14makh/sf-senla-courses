@@ -1,0 +1,9 @@
+Понимае, почему именно так, имеется.
+
+true
+false
+true
+false
+true
+false
+false
