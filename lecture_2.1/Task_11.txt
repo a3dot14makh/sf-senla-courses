@@ -8,10 +8,10 @@ for (Integer i = 0; i <= size; i++) {
         evenNumbers.add(i);
     }
 }
+evenNumbers.sort();
 
 /*
 evenNumbers.add(4);
-evenNumbers.sort();
 for (Integer i : evenNumbers) {
     System.debug(i);
 }
