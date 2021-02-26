@@ -1,0 +1,21 @@
+14. Необходимо написать программу, которая вычисляет простые числа в пределах от 1 до N. Число N – объявлено в первой строки скрипта.
+Вычисляется по алгоритму Эратосфена:
+
+Integer n = 22; 
+Integer[] A = new Integer[n+1];
+String primeNumber = '';
+
+A[1] = 0;
+for (Integer i = 2; i <= n; i++) {
+    A[i] = 1;
+}
+
+for (Integer i = 2; i <= n; i++) {
+    if(A[i] == 1){    
+        for (Integer j = i*i; j <= n; j = j+i){
+            A[j]=0;
+        } 
+        primeNumber = primeNumber + ' ' + i;
+    }
+}
+System.debug('Prime Number: ' + primeNumber); 
