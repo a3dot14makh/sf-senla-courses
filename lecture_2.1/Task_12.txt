@@ -1,0 +1,22 @@
+12. Введите строку, состоящую из английских слов. Найти количество слов с одинаковой длиной. Использовать мапу, где ключ - длина слова, значение - количество слов.
+
+String str = 'As you continue to work with Apex code, you learn how to determine which method to use';
+Map<Integer, Integer> lengthQuantity = new Map<Integer,Integer>();
+String[] words = str.split(' ');
+Integer size = words.size() - 1;
+Integer[] countArray = new Integer[0];
+
+for (Integer i = 0; i <= size; i++) {
+    countArray.add(words[i].length());
+}
+
+for (Integer i = 0; i <= size; i++) {
+    Integer count = 0;
+    for (Integer j = 0; j <= size; j++) {
+        if(countArray[i] == countArray[j]){
+            count++;
+        }
+    }
+    lengthQuantity.put(countArray[i], count);
+}
+System.debug(lengthQuantity);
