@@ -1,0 +1,24 @@
+13. Дана строка, состоящая из английских слов. Найти количество слов с одинаковой длиной слова. Использовать мапу, где ключ - длина слова, значение - список слов.
+
+String str = 'The following are methods for String';
+Map<Integer, String> lengthWords = new Map<Integer,String>();
+String[] words = str.split(' ');
+Integer size = words.size() - 1;
+Integer[] countArray = new Integer[0];
+
+for (Integer i = 0; i <= size; i++) {
+    countArray.add(words[i].length());
+}
+
+for (Integer i = 0; i <= size; i++) {
+    Integer count = 0;
+    String lineWords = '';
+    for (Integer j = 0; j <= size; j++) {
+        if(countArray[i] == countArray[j]){
+            count++;
+            lineWords = lineWords + ' ' + words[j];
+        }
+    }
+    lengthWords.put(countArray[i], lineWords);
+}
+System.debug(lengthWords);
