@@ -1,0 +1,9 @@
+16. Необходимо написать программу, которая проверяет число на “палиндромность”. Число для проверки объявлено в первой строки скрипта;
+
+Integer n = 61216;
+String numb = String.valueOf(n);
+String numbReverse = numb.reverse();
+
+if(numb == numbReverse){
+    System.debug('Number ' + n + ' is a palindrome');
+} else System.debug('Number ' + n + ' is not a palindrome');
