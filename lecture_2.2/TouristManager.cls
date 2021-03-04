@@ -37,8 +37,7 @@ public class TouristManager {
 		ORDER BY Name];
 	}
 
-	public static Map < Tourist__c,
-	List < Trip__c >> showTouristsWithFlights() {
+	public static Map < Tourist__c, List < Trip__c >> showTouristsWithFlights() {
 		Map < Tourist__c, List < Trip__c >> mapTouristTrip = new Map < Tourist__c, List < Trip__c >> ();
 		List < Tourist__c > touristList = [
 		SELECT Name, Age__c, (SELECT Name, Trip__r.Name, Trip__r.Start_Date__c FROM Flights__r)
