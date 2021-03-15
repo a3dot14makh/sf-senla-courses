@@ -1,34 +1,37 @@
 public with sharing class FlightTriggerHandler {
   public static void onBeforeInsert(List<Flight__c> newFlightList) {
-    List<Tourist__c> touristList = [SELECT Age__c, Id FROM Tourist__c];
+    List<Id> newTouristId = new List<Id>();
+    List<Id> newTripId = new List<Id>();
+    for (Flight__c flight : newFlightList) {
+      newTouristId.add(flight.Tourist__c);
+      newTripId.add(flight.Trip__c);
+    }
+
+    List<Tourist__c> touristList = [
+      SELECT Age__c, Id
+      FROM Tourist__c
+      WHERE Id IN :newTouristId
+    ];
     List<Trip__c> tripList = [
       SELECT Start_Date__c, Minimum_Age__c, Id
       FROM Trip__c
+      WHERE Id IN :newTripId
     ];
 
-    for (Flight__c newFlight : newFlightList) {
-      Decimal age = 0;
-      Decimal minimumAge = 0;
-      for (Tourist__c tourist : touristList) {
-        if (newFlight.Tourist__c == tourist.Id) {
-          age = tourist.Age__c;
-          break;
+    for (Integer i = 0; i < newFlightList.size(); i++) {
+      if (
+        newFlightList[i].Tourist__c == touristList[i].Id &&
+        newFlightList[i].Trip__c == tripList[i].Id
+      ) {
+        if (tripList[i].Start_Date__c <= Date.today()) {
+          newFlightList[i].Trip__c.addError('Your flight has already left.');
         }
-      }
-      for (Trip__c trip : tripList) {
-        if (newFlight.Trip__c == trip.Id) {
-          if (trip.Start_Date__c <= Date.today()) {
-            newFlight.Trip__c.addError('Your flight has already left.');
-          }
-
-          minimumAge = trip.Minimum_Age__c;
-          break;
+        if (touristList[i].Age__c < tripList[i].Minimum_Age__c) {
+          newFlightList[i]
+            .Tourist__c.addError(
+              'You are not eligible for this flight by age criteria.'
+            );
         }
-      }
-      if (age < minimumAge) {
-        newFlight.Tourist__c.addError(
-          'You are not eligible for this flight by age criteria.'
-        );
       }
     }
   }
