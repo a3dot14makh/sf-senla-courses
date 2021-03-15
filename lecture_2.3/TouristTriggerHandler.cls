@@ -1,8 +1,19 @@
 public with sharing class TouristTriggerHandler {
-  public static void onBeforeInsert(List<Tourist__c> newFlightList) {
-    List<Tourist__c> listFromBase = [SELECT Id, Name, Email__c FROM Tourist__c];
+  public static void onBeforeInsert(List<Tourist__c> newTouristList) {
+    List<String> selectionCriteria = new List<String>();
+
+    for (Tourist__c newTourist : newTouristList) {
+      selectionCriteria.add(newTourist.Name);
+    }
+
+    List<Tourist__c> listFromBase = [
+      SELECT Id, Name, Email__c
+      FROM Tourist__c
+      WHERE Name IN :selectionCriteria
+    ];
+
     for (Tourist__c touristFromBase : listFromBase) {
-      for (Tourist__c newTourist : newFlightList) {
+      for (Tourist__c newTourist : newTouristList) {
         if (
           touristFromBase.Name == newTourist.Name &&
           touristFromBase.Email__c == newTourist.Email__c
@@ -12,10 +23,13 @@ public with sharing class TouristTriggerHandler {
       }
     }
   }
+
   public static void onAfterUpdate(
     Map<Id, Tourist__c> oldMap,
     Map<Id, Tourist__c> newMap
   ) {
+    List<Flight__c> flightToUpdate = new List<Flight__c>();
+
     List<Tourist__c> toutistWithFlight = [
       SELECT
         Id,
@@ -24,7 +38,6 @@ public with sharing class TouristTriggerHandler {
       FROM Tourist__c
       WHERE Id IN :newMap.keySet()
     ];
-    List<Flight__c> flightToUpdate = new List<Flight__c>();
 
     for (Tourist__c tourist : toutistWithFlight) {
       //Получаю и сравниваю значение поля Active в старой и новой Мапе
@@ -41,6 +54,7 @@ public with sharing class TouristTriggerHandler {
         }
       }
     }
+
     if (flightToUpdate.size() > 0) {
       update flightToUpdate;
     }
