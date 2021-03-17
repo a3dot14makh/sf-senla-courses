@@ -2,11 +2,9 @@ public class TouristService {
   public static void markDuplicates(List<Tourist__c> newTouristList) {
     if (newTouristList.size() > 0) {
       List<String> selectionCriteriaNAme = new List<String>();
-      for (Tourist__c newTourist : newTouristList) {
-        selectionCriteriaNAme.add(newTourist.Name);
-      }
       List<String> selectionCriteriaEmail = new List<String>();
       for (Tourist__c newTourist : newTouristList) {
+        selectionCriteriaNAme.add(newTourist.Name);
         selectionCriteriaEmail.add(newTourist.Email__c);
       }
       List<Tourist__c> listFromBase = [
