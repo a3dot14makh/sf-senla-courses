@@ -13,7 +13,7 @@ public class TouristManager {
   }
 
   public static List<Tourist__c> getByAge(Set<Decimal> ageSet) {
-    if (ageSet.isEmpty()) {
+    if (ageSet == null || ageSet.isEmpty()) {
       return new List<Tourist__c>();
     }
 
@@ -29,8 +29,8 @@ public class TouristManager {
     Integer yearOfFlightStart
   ) {
     if (
-      String.valueOf(yearOfFlightStart).length() != 4 ||
-      yearOfFlightStart == null
+      yearOfFlightStart == null ||
+      String.valueOf(yearOfFlightStart).length() != 4
     ) {
       return new List<Tourist__c>();
     }
@@ -48,7 +48,7 @@ public class TouristManager {
     ];
   }
 
-  public static Map<Tourist__c, List<Trip__c>> getWithTrips() {
+  public static Map<Tourist__c, List<Trip__c>> getTripsByTourist() {
     Map<Tourist__c, List<Trip__c>> mapTouristTrip = new Map<Tourist__c, List<Trip__c>>();
     List<Tourist__c> touristList = [
       SELECT
