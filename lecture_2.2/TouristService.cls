@@ -1,19 +1,14 @@
 public class TouristService {
   public static void markDuplicates(List<Tourist__c> newTouristList) {
     if (newTouristList.size() > 0) {
-      List<String> selectionCriteriaNAme = new List<String>();
-      List<String> selectionCriteriaEmail = new List<String>();
+      Set<String> names = new Set<String>();
+      Set<String> emails = new Set<String>();
       for (Tourist__c newTourist : newTouristList) {
-        selectionCriteriaNAme.add(newTourist.Name);
-        selectionCriteriaEmail.add(newTourist.Email__c);
+        names.add(newTourist.Name);
+        emails.add(newTourist.Email__c);
       }
-      List<Tourist__c> listFromBase = [
-        SELECT Id, Name, Email__c
-        FROM Tourist__c
-        WHERE
-          Name IN :selectionCriteriaNAme
-          AND Email__c IN :selectionCriteriaEmail
-      ];
+      List<Tourist__c> listFromBase = TouristManager.getByNameAndEmail(names, emails);
+      
       for (Tourist__c touristFromBase : listFromBase) {
         for (Tourist__c newTourist : newTouristList) {
           if (

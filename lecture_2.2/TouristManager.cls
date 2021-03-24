@@ -77,4 +77,14 @@ public class TouristManager {
       ORDER BY Name
     ];
   }
+  public static List<Tourist__c> getByNameAndEmail(
+    Set<String> nameSet,
+    Set<String> emailSet
+  ) {
+    return [
+      SELECT Id, Name, Email__c
+      FROM Tourist__c
+      WHERE Name IN :nameSet AND Email__c IN :emailSet
+    ];
+  }
 }
