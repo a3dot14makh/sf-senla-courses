@@ -5,7 +5,8 @@ public class TouristManager {
     }
 
     return [
-      SELECT Name, Age__c
+      SELECT Name, 
+      Age__c
       FROM Tourist__c
       WHERE Name = :touristName
       ORDER BY Age__c
@@ -18,7 +19,8 @@ public class TouristManager {
     }
 
     return [
-      SELECT Name, Age__c
+      SELECT Name, 
+      Age__c
       FROM Tourist__c
       WHERE Age__c IN :ageSet
       ORDER BY Age__c
@@ -36,7 +38,8 @@ public class TouristManager {
     }
 
     return [
-      SELECT Name, Age__c
+      SELECT Name, 
+      Age__c
       FROM Tourist__c
       WHERE
         Id IN (
@@ -48,9 +51,8 @@ public class TouristManager {
     ];
   }
 
-  public static Map<Tourist__c, List<Trip__c>> getTripsByTourist() {
-    Map<Tourist__c, List<Trip__c>> mapTouristTrip = new Map<Tourist__c, List<Trip__c>>();
-    List<Tourist__c> touristList = [
+  public static List<Tourist__c> getTouristWithTrips() {
+    return [
       SELECT
         Name,
         Age__c,
@@ -58,20 +60,12 @@ public class TouristManager {
       FROM Tourist__c
       ORDER BY Name
     ];
-    //Parent to child query in Apex using inner query
-    for (Tourist__c tourist : touristList) {
-      List<Trip__c> tripList = new List<Trip__c>();
-      for (Flight__c flight : tourist.Flights__r) {
-        tripList.add(flight.Trip__r);
-      }
-      mapTouristTrip.put(tourist, tripList);
-    }
-    return mapTouristTrip;
   }
 
   public static List<Tourist__c> getWithoutFlights() {
     return [
-      SELECT Name, Age__c
+      SELECT Name, 
+      Age__c
       FROM Tourist__c
       WHERE Id NOT IN (SELECT Tourist__c FROM Flight__c)
       ORDER BY Name
@@ -81,8 +75,18 @@ public class TouristManager {
     Set<String> nameSet,
     Set<String> emailSet
   ) {
+    if (
+      nameSet == null ||
+      nameSet.isEmpty() ||
+      emailSet == null ||
+      emailSet.isEmpty()
+    ) {
+      return new List<Tourist__c>();
+    }
     return [
-      SELECT Id, Name, Email__c
+      SELECT Id, 
+      Name, 
+      Email__c
       FROM Tourist__c
       WHERE Name IN :nameSet AND Email__c IN :emailSet
     ];
