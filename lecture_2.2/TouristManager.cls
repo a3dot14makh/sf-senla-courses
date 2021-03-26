@@ -63,6 +63,9 @@ public class TouristManager {
   }
 
   public static List<Tourist__c> getTouristWithFlightsById(Set<Id> idSet) {
+    if (idSet == null || idSet.isEmpty()) {
+      return new List<Tourist__c>();
+    }
     return [
       SELECT
         Id,
