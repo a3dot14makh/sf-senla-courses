@@ -62,6 +62,17 @@ public class TouristManager {
     ];
   }
 
+  public static List<Tourist__c> getTouristWithFlightsById(Set<Id> idSet) {
+    return [
+      SELECT
+        Id,
+        Active__c,
+        (SELECT Id, Trip__r.Start_Date__c, Status__c FROM Flights__r)
+      FROM Tourist__c
+      WHERE Id IN :idSet
+    ];
+  }
+
   public static List<Tourist__c> getWithoutFlights() {
     return [
       SELECT Name, 
