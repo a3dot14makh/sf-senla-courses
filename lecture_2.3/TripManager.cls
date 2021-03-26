@@ -4,7 +4,9 @@ public with sharing class TripManager {
       return new List<Trip__c>();
     }
     return [
-      SELECT Start_Date__c, Minimum_Age__c, Id
+      SELECT Id,
+      Start_Date__c, 
+      Minimum_Age__c
       FROM Trip__c
       WHERE Id IN :idSet
     ];
