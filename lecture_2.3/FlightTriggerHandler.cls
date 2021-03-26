@@ -1,22 +1,16 @@
 public with sharing class FlightTriggerHandler {
+  public static Boolean wasExecuted = false;
+
   public static void onBeforeInsert(List<Flight__c> newFlightList) {
-    List<Id> newTouristId = new List<Id>();
-    List<Id> newTripId = new List<Id>();
+    Set<Id> newTouristId = new Set<Id>();
+    Set<Id> newTripId = new Set<Id>();
     for (Flight__c flight : newFlightList) {
       newTouristId.add(flight.Tourist__c);
       newTripId.add(flight.Trip__c);
     }
 
-    List<Tourist__c> touristList = [
-      SELECT Age__c, Id
-      FROM Tourist__c
-      WHERE Id IN :newTouristId
-    ];
-    List<Trip__c> tripList = [
-      SELECT Start_Date__c, Minimum_Age__c, Id
-      FROM Trip__c
-      WHERE Id IN :newTripId
-    ];
+    List<Tourist__c> touristList = TouristManager.getById(newTouristId);
+    List<Trip__c> tripList = TripManager.getById(newTripId);
 
     for (Integer i = 0; i < newFlightList.size(); i++) {
       if (
