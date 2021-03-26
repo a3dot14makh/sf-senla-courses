@@ -1,4 +1,11 @@
 public class TouristManager {
+  public static List<Tourist__c> getById(Set<Id> idSet) {
+    if (idSet == null || idSet.isEmpty()) {
+      return new List<Tourist__c>();
+    }
+    return [SELECT Age__c, Id FROM Tourist__c WHERE Id IN :idSet];
+  }
+  
   public static List<Tourist__c> getByName(String touristName) {
     if (String.isBlank(touristName)) {
       return new List<Tourist__c>();
