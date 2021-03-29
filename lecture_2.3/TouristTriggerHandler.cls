@@ -2,33 +2,20 @@ public with sharing class TouristTriggerHandler {
   public static Boolean wasExecuted = false;
 
   public static void onBeforeInsert(List<Tourist__c> newTouristList) {
-    Set<String> names = new Set<String>();
-    Set<String> emails = new Set<String>();
-    for (Tourist__c newTourist : newTouristList) {
-      names.add(newTourist.Name);
-      emails.add(newTourist.Email__c);
+    if (newTouristList == null || newTouristList.isEmpty()) {
+      return;
     }
-    List<Tourist__c> listFromBase = TouristManager.getByNameAndEmail(
-      names,
-      emails
-    );
 
-    for (Tourist__c touristFromBase : listFromBase) {
-      for (Tourist__c newTourist : newTouristList) {
-        if (
-          touristFromBase.Name == newTourist.Name &&
-          touristFromBase.Email__c == newTourist.Email__c
-        ) {
-          newTourist.Is_Duplicate__c = true;
-        }
-      }
-    }
+    TouristService.markDuplicates(newTouristList);
   }
 
   public static void onAfterUpdate(
     Map<Id, Tourist__c> oldMap,
     Map<Id, Tourist__c> newMap
   ) {
+    if (newMap == null || newMap.isEmpty() || oldMap == null || oldMap.isEmpty()) {
+      return;
+    }
     List<Flight__c> flightToUpdate = new List<Flight__c>();
     List<Tourist__c> toutistsWithFlights = TouristManager.getTouristWithFlightsById(
       newMap.keySet()
@@ -48,7 +35,7 @@ public with sharing class TouristTriggerHandler {
       }
     }
 
-    if (flightToUpdate.size() > 0) {
+    if (flightToUpdate.isEmpty()) {
       update flightToUpdate;
     }
   }
