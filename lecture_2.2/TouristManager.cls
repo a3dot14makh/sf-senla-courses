@@ -3,7 +3,12 @@ public class TouristManager {
     if (idSet == null || idSet.isEmpty()) {
       return new List<Tourist__c>();
     }
-    return [SELECT Age__c, Id FROM Tourist__c WHERE Id IN :idSet];
+    return [
+      SELECT Id,
+      Age__c
+      FROM Tourist__c
+      WHERE Id IN :idSet
+      ];
   }
   
   public static List<Tourist__c> getByName(String touristName) {
