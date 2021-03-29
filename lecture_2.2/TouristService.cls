@@ -25,7 +25,6 @@ public class TouristService {
         }
       }
     }
-    insert newTouristList;
   }
 
   public static Map<Tourist__c, List<Trip__c>> getTripsByTourist() {
