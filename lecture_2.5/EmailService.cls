@@ -10,6 +10,7 @@ public class EmailService {
       String.isBlank(subject) ||
       String.isBlank(plainTextBody)
     ) {
+      return;
     }
     Messaging.SingleEmailMessage message = new Messaging.SingleEmailMessage();
     message.setToAddresses(emailAddress);
