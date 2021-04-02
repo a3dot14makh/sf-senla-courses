@@ -1,0 +1,5 @@
+ScheduledBatch deleteFlights = new ScheduledBatch();
+String sch1 = '0 0 0 ? * * *';
+String sch2 = '0 30 0 ? * * *';
+String jobID1 = System.schedule('Deleting declined flights at 00:00:00 am every day', sch, new ScheduledBatch());
+String jobID2 = System.schedule('Deleting declined flights at 00:30:00 am every day', sch, new ScheduledBatch());
