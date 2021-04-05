@@ -2,13 +2,13 @@ public class EmailService {
   public static void sendEmailFromBatch(
     List<String> emailAddress,
     String subject,
-    String plainTextBody
+    String htmlBody
   ) {
     if (
       emailAddress == null ||
       emailAddress.isEmpty() ||
       String.isBlank(subject) ||
-      String.isBlank(plainTextBody)
+      String.isBlank(htmlBody)
     ) {
       return;
     }
@@ -16,7 +16,7 @@ public class EmailService {
     message.setToAddresses(emailAddress);
     message.setSenderDisplayName('Batch Processing');
     message.setSubject(subject);
-    message.setPlainTextBody(plainTextBody);
+    message.setHtmlBody(htmlBody);
     Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{ message });
   }
 }

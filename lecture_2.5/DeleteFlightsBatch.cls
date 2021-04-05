@@ -37,20 +37,24 @@ public class DeleteFlightsBatch implements Database.Batchable<sObject>, Database
       touristList.Email_Custom_Field__c
     };
     String subject = 'Batch Process Completed';
-    String plainTextBody = 'Name : Number of remote flights\n';
-
+    String htmlBody = 'Name : Number of remote flights' + '<br>';
     if (resultMap.isEmpty()) {
-      plainTextBody = 'No Flights found.';
+      htmlBody = 'No Flights found.';
     } else {
       for (Tourist__c tourist : resultMap.keySet()) {
-        plainTextBody =
-          plainTextBody +
+        htmlBody +=
+          '<a href="' +
+          URL.getSalesforceBaseUrl().toExternalForm() +
+          '/' +
+          tourist.Id +
+          '">"' +
           tourist.Name +
+          '"</a>' +
           ' : ' +
           resultMap.get(tourist) +
-          '\n';
+          '<br>';
       }
     }
-    EmailService.sendEmailFromBatch(emailAddress, subject, plainTextBody);
+    EmailService.sendEmailFromBatch(emailAddress, subject, htmlBody);
   }
 }
