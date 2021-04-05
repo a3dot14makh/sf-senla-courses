@@ -25,17 +25,7 @@ public class DeleteFlightsBatch implements Database.Batchable<sObject>, Database
   }
 
   public void finish(Database.BatchableContext bc) {
-    /*
-      Как я понимаю, для запросов из Custom Metadata Type
-      тоже должен создаваться отдельный Manager класс?
-    */
-    Tourist_Setting__mdt touristList = [
-      SELECT Email_Custom_Field__c
-      FROM Tourist_Setting__mdt
-    ];
-    List<String> emailAddress = new List<String>{
-      touristList.Email_Custom_Field__c
-    };
+    List<String> emailAddress = TouristSettingManager.getEmails();
     String subject = 'Batch Process Completed';
     String htmlBody = 'Name : Number of remote flights' + '<br>';
     if (resultMap.isEmpty()) {
@@ -47,9 +37,9 @@ public class DeleteFlightsBatch implements Database.Batchable<sObject>, Database
           URL.getSalesforceBaseUrl().toExternalForm() +
           '/' +
           tourist.Id +
-          '">"' +
+          '">' +
           tourist.Name +
-          '"</a>' +
+          '</a>' +
           ' : ' +
           resultMap.get(tourist) +
           '<br>';
