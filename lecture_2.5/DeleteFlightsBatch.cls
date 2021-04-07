@@ -19,9 +19,11 @@ public class DeleteFlightsBatch implements Database.Batchable<sObject>, Database
         if (scope == null || scope.isEmpty()) {
             return;
         }
+        //Needed for sorting Tourists
+        List<Tourist__c> touristsList = new List<Tourist__c>();
 
         for (Flight__c flight : scope) {
-            tourists.add(flight.Tourist__r);
+            touristsList.add(flight.Tourist__r);
             if (resultMap.containsKey(flight.Tourist__r.Id)) {
                 Integer i = resultMap.get(flight.Tourist__r.Id);
                 resultMap.put(flight.Tourist__r.Id, i + 1);
@@ -29,13 +31,21 @@ public class DeleteFlightsBatch implements Database.Batchable<sObject>, Database
                 resultMap.put(flight.Tourist__r.Id, 1);
             }
         }
+        touristsList.sort();
+        tourists.addAll(touristsList);
+
         delete scope;
     }
 
     public void finish(Database.BatchableContext bc) {
         List<String> emailAddress = GeneralMetadataManager.getEmails();
         String htmlBody = creationHtmlBody();
-        EmailService.sendEmailFromBatch(emailAddress, Constants.EMAIL_SUBJECT_FOR_BATCH, htmlBody);
+        EmailService.sendEmail(
+            emailAddress,
+            Constants.EMAIL_SENDER_DISPLAY_NAME_FOR_BATCH,
+            Constants.EMAIL_SUBJECT_FOR_BATCH,
+            htmlBody
+        );
     }
 
     private String creationHtmlBody() {

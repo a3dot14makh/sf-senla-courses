@@ -1,4 +1,5 @@
 public class TouristService {
+    
     public static void markDuplicates(List<Tourist__c> newTouristList) {
         if (newTouristList == null || newTouristList.isEmpty()) {
             return;
