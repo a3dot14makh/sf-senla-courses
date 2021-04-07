@@ -8,7 +8,8 @@ public class DeleteFlightsBatch implements Database.Batchable<sObject>, Database
         Constants.OBJECT_FIELD_VALUE_FLIGHT_STATUS_DECLINED +
         '\' AND ' +
         Constants.CREATED_DATE_MORE_THAN_30_DAYS;
-    Map<Tourist__c, Integer> resultMap = new Map<Tourist__c, Integer>();
+    Set<Tourist__c> tourists = new Set<Tourist__c>();
+    Map<Id, Integer> resultMap = new Map<Id, Integer>();
 
     public Database.QueryLocator start(Database.BatchableContext bc) {
         return Database.getQueryLocator(QUERY);
@@ -20,11 +21,12 @@ public class DeleteFlightsBatch implements Database.Batchable<sObject>, Database
         }
 
         for (Flight__c flight : scope) {
-            if (resultMap.containsKey(flight.Tourist__r)) {
-                Integer i = resultMap.get(flight.Tourist__r);
-                resultMap.put(flight.Tourist__r, i + 1);
+            tourists.add(flight.Tourist__r);
+            if (resultMap.containsKey(flight.Tourist__r.Id)) {
+                Integer i = resultMap.get(flight.Tourist__r.Id);
+                resultMap.put(flight.Tourist__r.Id, i + 1);
             } else {
-                resultMap.put(flight.Tourist__r, 1);
+                resultMap.put(flight.Tourist__r.Id, 1);
             }
         }
         delete scope;
@@ -42,7 +44,7 @@ public class DeleteFlightsBatch implements Database.Batchable<sObject>, Database
         if (resultMap.isEmpty()) {
             htmlBody = EMAIL_BODY_VALUE_NOTHING_FOUND;
         } else {
-            for (Tourist__c tourist : resultMap.keySet()) {
+            for (Tourist__c tourist : tourists) {
                 htmlBody +=
                     '<a href="' +
                     URL.getSalesforceBaseUrl().toExternalForm() +
@@ -52,7 +54,7 @@ public class DeleteFlightsBatch implements Database.Batchable<sObject>, Database
                     tourist.Name +
                     '</a>' +
                     ' : ' +
-                    resultMap.get(tourist) +
+                    resultMap.get(tourist.Id) +
                     '<br>';
             }
         }
