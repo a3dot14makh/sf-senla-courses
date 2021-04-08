@@ -1,4 +1,4 @@
-public class DeleteFlightsBatch implements Database.Batchable<sObject>, Database.Stateful {
+public class DeleteFlightsBatch implements Database.Batchable<sObject>, Database.RaisesPlatformEvents, Database.Stateful {
     private final String EMAIL_HEADER = 'Tourist\'s Name : Number of remote flights';
     private final String EMAIL_BODY_VALUE_NOTHING_FOUND = 'No Flights found to delete.';
     private final String QUERY =
