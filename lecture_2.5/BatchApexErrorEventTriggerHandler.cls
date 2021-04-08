@@ -8,7 +8,7 @@ public class BatchApexErrorEventTriggerHandler {
             asyncApexJobIds.add(evt.AsyncApexJobId);
         }
         Map<Id, AsyncApexJob> jobs = new Map<Id, AsyncApexJob>(
-            [SELECT id, ParentJobId, ApexClass.Name FROM AsyncApexJob WHERE Id IN :asyncApexJobIds]
+            AsyncApexJobManager.getById(asyncApexJobIds)
         );
 
         for (BatchApexErrorEvent evt : errorEvents) {
