@@ -1,4 +1,4 @@
-public class ScheduledBatch implements Schedulable {
+public class DeleteFlightsScheduled implements Schedulable {
     
     public void execute(SchedulableContext sc) {
         Database.executeBatch(new DeleteFlightsBatch());

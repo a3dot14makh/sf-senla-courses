@@ -12,11 +12,11 @@ public class BatchApexErrorEventTriggerHandler {
         );
 
         for (BatchApexErrorEvent evt : errorEvents) {
-            if (jobs.get(evt.AsyncApexJobId).ApexClass.Name == 'DeleteFlightsBatch') {
+            if (jobs.get(evt.AsyncApexJobId).ApexClass.Name == DeleteFlightsBatch.class.getName()) {
 
                 for (String item : evt.JobScope.split(',')) {
                     Error_Log__c error = new Error_Log__c(
-                        JobId__c = jobs.get(evt.AsyncApexJobId).ParentJobId.to15(),
+                        JobId__c = jobs.get(evt.AsyncApexJobId).ParentJobId,
                         Error__c = evt.ExceptionType,
                         Records__c = (Id) item
                     );

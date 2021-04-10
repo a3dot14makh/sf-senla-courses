@@ -8,8 +8,10 @@ public class DeleteFlightsBatch implements Database.Batchable<sObject>, Database
         Constants.OBJECT_FIELD_VALUE_FLIGHT_STATUS_DECLINED +
         '\' AND ' +
         Constants.CREATED_DATE_MORE_THAN_30_DAYS;
-    Set<Tourist__c> tourists = new Set<Tourist__c>();
-    Map<Id, Integer> resultMap = new Map<Id, Integer>();
+    private Set<Tourist__c> tourists = new Set<Tourist__c>();
+    //Needed for sorting Tourists
+    private List<Tourist__c> touristsBeforeSorting  = new List<Tourist__c>();
+    private Map<Id, Integer> resultMap = new Map<Id, Integer>();
 
     public Database.QueryLocator start(Database.BatchableContext bc) {
         return Database.getQueryLocator(QUERY);
@@ -19,11 +21,9 @@ public class DeleteFlightsBatch implements Database.Batchable<sObject>, Database
         if (scope == null || scope.isEmpty()) {
             return;
         }
-        //Needed for sorting Tourists
-        List<Tourist__c> touristsList = new List<Tourist__c>();
 
         for (Flight__c flight : scope) {
-            touristsList.add(flight.Tourist__r);
+            touristsBeforeSorting.add(flight.Tourist__r);
             if (resultMap.containsKey(flight.Tourist__r.Id)) {
                 Integer i = resultMap.get(flight.Tourist__r.Id);
                 resultMap.put(flight.Tourist__r.Id, i + 1);
@@ -49,6 +49,8 @@ public class DeleteFlightsBatch implements Database.Batchable<sObject>, Database
     }
 
     private String creationHtmlBody() {
+        touristsBeforeSorting.sort();
+        tourists.addAll(touristsBeforeSorting);
         String htmlBody = EMAIL_HEADER + '<br>';
 
         if (resultMap.isEmpty()) {
