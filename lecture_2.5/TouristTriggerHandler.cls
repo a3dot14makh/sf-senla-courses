@@ -1,7 +1,7 @@
 public class TouristTriggerHandler {
     public static Boolean wasExecuted = false;
 
-    public static void onAfterInsert(Map<Id, Tourist__c> oldMap, Map<Id, Tourist__c> newMap) {
+    public static void onAfterInsert(Map<Id, Tourist__c> newMap) {
         TouristService.markDuplicatesAsync(newMap.keySet());
     }
 
