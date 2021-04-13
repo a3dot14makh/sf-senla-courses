@@ -31,8 +31,6 @@ public class DeleteFlightsBatch implements Database.Batchable<sObject>, Database
                 resultMap.put(flight.Tourist__r.Id, 1);
             }
         }
-        touristsList.sort();
-        tourists.addAll(touristsList);
 
         delete scope;
     }
