@@ -6,7 +6,11 @@ public class Constants {
     public static final String RESPONSE_BODY_PARAMETER_NAME_EMPTY = 'The name must be not empty.';
     public static final String RESPONSE_BODY_PARAMETER_AGE_NOT_INTEGER = 'The age must be a number.';
     public static final String RESPONSE_BODY_RECORDS_EXISTS = 'Records exists.';
-    public static final String REQUEST_ENDPOINT_IN_WEATHERBIT = 'https://weatherbit-v1-mashape.p.rapidapi.com/forecast/daily';
-    public static final String REQUEST_HEADER_RAPIDAPI_HOST = 'weatherbit-v1-mashape.p.rapidapi.com';
-    public static final String REQUEST_HEADER_RAPIDAPI_KEY = 'a931a01d22msh844c1c9ac0000e9p11d62bjsnb01ea37dd1f1';
+    public static final String RESPONSE_BODY_INTERNAL_SERVER_ERROR = 'Internal server error';
+    public static final String REQUEST_HEADER_VALUE_RAPIDAPI_KEY = 'a931a01d22msh844c1c9ac0000e9p11d62bjsnb01ea37dd1f1';
+    public static final String HTTP_METHOD_GET = 'GET';
+    public static final Integer RESPONSE_STATUS_CODE_500 = 500;
+    public static final Integer RESPONSE_STATUS_CODE_200 = 200;
+    public static final Integer RESPONSE_STATUS_CODE_404 = 404;
+    public static final Integer RESPONSE_STATUS_CODE_409 = 409;
 }

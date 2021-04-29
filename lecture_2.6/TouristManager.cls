@@ -1,20 +1,16 @@
 public class TouristManager {
 
     public static List<Tourist__c> getByName(String touristName) {
-        if (String.isBlank(touristName)) {
+        if (String.isBlank(name)) {
             return new List<Tourist__c>();
         }
-
-        return [
-            SELECT Name, 
-            Age__c, 
-            DuplicateKey__c, 
-            Birthday__c, 
-            Email__c
-            FROM Tourist__c
-            WHERE Name = :touristName
-            ORDER BY Age__c
+        List<List<Tourist__c>> tourists = [
+            FIND :name
+            IN NAME FIELDS
+            RETURNING Tourist__c(Name, Age__c)
         ];
+
+        return tourists.get(0);
     }
 
     public static List<Tourist__c> getByNameAndAge(String name, Integer age) {

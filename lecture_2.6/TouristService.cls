@@ -5,6 +5,7 @@ public class TouristService {
         Set<Date> birthdays = new Set<Date>();
         Set<String> emails = new Set<String>();
         Set<String> duplicateKeys = new Set<String>();
+        Boolean result = false;
 
         for (Tourist__c tourist : inputTourists) {
             names.add(tourist.Name);
@@ -20,9 +21,9 @@ public class TouristService {
         for (Tourist__c tourist : inputTourists) {
             String duplicateKey = tourist.Name + tourist.Birthday__c + tourist.Email__c;
             if (duplicateKeys.contains(duplicateKey)) {
-                return true;
+                result = true;
             }
         }
-        return false;
+        return result;
     }
 }

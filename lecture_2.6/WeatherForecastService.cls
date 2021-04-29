@@ -1,51 +1,45 @@
 public class WeatherForecastService {
-    public class WeatherForecastException extends Exception {}
+    public class WeatherForecastException extends Exception {
+    }
 
     public static Map<Date, Decimal> getForecasts(Decimal latitude, Decimal longitude) {
         Map<Date, Decimal> result = new Map<Date, Decimal>();
         Http http = new Http();
-        HTTPResponse response = http.send(createRequest(latitude, longitude));
+        HTTPResponse response = http.send(WeatherbitAPIService.createRequest(latitude, longitude));
 
-        if (response.getStatusCode() == 200) {
-            Map<String, Object> meta = (Map<String, Object>) JSON.deserializeUntyped(
-                response.getBody()
-            );
-
-            List<Object> dataObjects  = (List<Object>) meta.get('data');
-            List<Map<String, Object>> valueByParameter = new List<Map<String, Object>>();
-
-            for (Object obj : dataObjects) {
-                valueByParameter.add((Map<String, Object>) obj);
-            }
-
-            for (Map<String, Object> item : valueByParameter) {
-                result.put(
-                    Date.valueOf(item.get('datetime').toString()),
-                    (Decimal) (item.get('temp'))
-                );
-            }
-        }else {
+        if (response.getStatusCode() == Constants.RESPONSE_STATUS_CODE_200) {
+            result = WeatherbitAPIService.parseForecastsUntyped(response.getBody());
+        } else {
             throw new WeatherForecastException(response.getStatusCode() + ' ' + response.getStatus());
         }
 
         return result;
     }
 
-    private static HttpRequest createRequest(Decimal latitude, Decimal longitude) {
-        HttpRequest request = new HttpRequest();
-        String requestEndPoint =
-            Constants.REQUEST_ENDPOINT_IN_WEATHERBIT +
-            '?lat=' +
-            latitude +
-            '&lon=' +
-            longitude +
-            '&units=metric';
+    public static List<Weather_Daily_Forecast__c> getActualForecastsForSpacePoints(
+        List<Space_Point__c> spacePoints
+    ) {
+        List<Weather_Daily_Forecast__c> actualForecasts = new List<Weather_Daily_Forecast__c>();
+        for (Space_Point__c spacePoint : spacePoints) {
+            Map<Date, Decimal> forecast = new Map<Date, Decimal>();
+            try {
+                forecast = getForecasts(spacePoint.Latitude__c, spacePoint.Longitude__c);
+            } catch (Exception ex) {
+                System.debug(LoggingLevel.ERROR, ex.getMessage());
+            }
 
-        request.setEndpoint(requestEndPoint);
-        request.setMethod('GET');
-        request.setHeader('x-rapidapi-host', Constants.REQUEST_HEADER_RAPIDAPI_HOST);
-        request.setHeader('x-rapidapi-key', Constants.REQUEST_HEADER_RAPIDAPI_KEY);
-
-        return request;
+            if (!forecast.isEmpty()) {
+                for (Date forecastDate : forecast.keyset()) {
+                    Weather_Daily_Forecast__c newForecast = new Weather_Daily_Forecast__c(
+                        Name = forecastDate.format() + ' Forecast in: ' + spacePoint.Name,
+                        Date__c = forecastDate,
+                        Average_Temperature__c = forecast.get(forecastDate),
+                        Space_Point__c = spacePoint.Id
+                    );
+                    actualForecasts.add(newForecast);
+                }
+            }
+        }
+        return actualForecasts;
     }
 }
