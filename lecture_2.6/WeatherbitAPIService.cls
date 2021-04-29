@@ -21,9 +21,7 @@ public class WeatherbitAPIService {
 
     public static Map<Date, Decimal> parseForecastsUntyped(String responseBody) {
         Map<Date, Decimal> result = new Map<Date, Decimal>();
-        Map<String, Object> forecastsUntyped = (Map<String, Object>) JSON.deserializeUntyped(
-            responseBody
-        );
+        Map<String, Object> forecastsUntyped = (Map<String, Object>) JSON.deserializeUntyped(responseBody);
 
         List<Object> dataObjects = (List<Object>) forecastsUntyped.get(RESPONSE_PARAMETER_DATA);
         List<Map<String, Object>> valueByParameter = new List<Map<String, Object>>();
