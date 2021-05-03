@@ -35,6 +35,7 @@ global with sharing class TouristRestService {
         } else {
             try {
                 insert tourists;
+                response.statusCode = Constants.RESPONSE_STATUS_CODE_200;
             } catch (DmlException ex) {
                 response.statusCode = Constants.RESPONSE_STATUS_CODE_500;
                 response.responseBody = Blob.valueOf(Constants.RESPONSE_BODY_INTERNAL_SERVER_ERROR);

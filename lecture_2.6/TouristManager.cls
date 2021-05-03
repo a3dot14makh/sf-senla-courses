@@ -1,6 +1,6 @@
 public class TouristManager {
 
-    public static List<Tourist__c> getByName(String touristName) {
+    public static List<Tourist__c> getByName(String name) {
         if (String.isBlank(name)) {
             return new List<Tourist__c>();
         }

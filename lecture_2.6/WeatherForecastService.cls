@@ -2,20 +2,6 @@ public class WeatherForecastService {
     public class WeatherForecastException extends Exception {
     }
 
-    public static Map<Date, Decimal> getForecasts(Decimal latitude, Decimal longitude) {
-        Map<Date, Decimal> result = new Map<Date, Decimal>();
-        Http http = new Http();
-        HTTPResponse response = http.send(WeatherbitAPIService.createRequest(latitude, longitude));
-
-        if (response.getStatusCode() == Constants.RESPONSE_STATUS_CODE_200) {
-            result = WeatherbitAPIService.parseForecastsUntyped(response.getBody());
-        } else {
-            throw new WeatherForecastException(response.getStatusCode() + ' ' + response.getStatus());
-        }
-
-        return result;
-    }
-
     public static List<Weather_Daily_Forecast__c> getActualForecastsForSpacePoints(
         List<Space_Point__c> spacePoints
     ) {
@@ -41,5 +27,19 @@ public class WeatherForecastService {
             }
         }
         return actualForecasts;
+    }
+
+    private static Map<Date, Decimal> getForecasts(Decimal latitude, Decimal longitude) {
+        Map<Date, Decimal> result = new Map<Date, Decimal>();
+        Http http = new Http();
+        HTTPResponse response = http.send(WeatherbitAPIService.createRequest(latitude, longitude));
+
+        if (response.getStatusCode() == Constants.RESPONSE_STATUS_CODE_200) {
+            result = WeatherbitAPIService.parseForecastsUntyped(response.getBody());
+        } else {
+            throw new WeatherForecastException(response.getStatusCode() + ' ' + response.getStatus());
+        }
+
+        return result;
     }
 }

@@ -1,4 +1,5 @@
 public class WeatherForecastUpdater {
+    
     @future(callout=true)
     public static void updateForecasts() {
         List<Weather_Daily_Forecast__c> oldDailyForecasts = WeatherForecastManager.getAll();
