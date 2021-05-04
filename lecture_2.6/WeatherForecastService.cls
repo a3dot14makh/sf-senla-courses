@@ -6,24 +6,24 @@ public class WeatherForecastService {
         List<Space_Point__c> spacePoints
     ) {
         List<Weather_Daily_Forecast__c> actualForecasts = new List<Weather_Daily_Forecast__c>();
+        
         for (Space_Point__c spacePoint : spacePoints) {
             Map<Date, Decimal> forecast = new Map<Date, Decimal>();
+
             try {
                 forecast = getForecasts(spacePoint.Latitude__c, spacePoint.Longitude__c);
-            } catch (Exception ex) {
+            } catch (WeatherForecastException ex) {
                 System.debug(LoggingLevel.ERROR, ex.getMessage());
             }
 
-            if (!forecast.isEmpty()) {
-                for (Date forecastDate : forecast.keyset()) {
-                    Weather_Daily_Forecast__c newForecast = new Weather_Daily_Forecast__c(
-                        Name = forecastDate.format() + ' Forecast in: ' + spacePoint.Name,
-                        Date__c = forecastDate,
-                        Average_Temperature__c = forecast.get(forecastDate),
-                        Space_Point__c = spacePoint.Id
-                    );
-                    actualForecasts.add(newForecast);
-                }
+            for (Date forecastDate : forecast.keyset()) {
+                Weather_Daily_Forecast__c newForecast = new Weather_Daily_Forecast__c(
+                    Name = forecastDate.format() + ' Forecast in: ' + spacePoint.Name,
+                    Date__c = forecastDate,
+                    Average_Temperature__c = forecast.get(forecastDate),
+                    Space_Point__c = spacePoint.Id
+                );
+                actualForecasts.add(newForecast);
             }
         }
         return actualForecasts;
