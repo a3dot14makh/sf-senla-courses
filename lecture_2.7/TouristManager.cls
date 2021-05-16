@@ -1,5 +1,5 @@
 public class TouristManager {
-    
+
     public static List<Tourist__c> getById(Set<Id> idSet) {
         if (idSet == null || idSet.isEmpty()) {
             return new List<Tourist__c>();
@@ -14,23 +14,42 @@ public class TouristManager {
     }
 
     public static List<Tourist__c> getByName(String name) {
-        
         if (String.isBlank(name)) {
             return new List<Tourist__c>();
         }
         List<List<Tourist__c>> tourists = [
-            FIND :name
-            IN NAME FIELDS
+            FIND :name 
+            IN NAME FIELDS 
             RETURNING Tourist__c(Name, Age__c)
         ];
-        
+
         return tourists.get(0);
     }
 
-    public static List<Tourist__c> getByDuplicateKeys(
-        Set<String> duplicateKeys,
-        Set<Id> exclusionId
-    ) {
+    public static List<Tourist__c> getTouristWithFlightsById(Set<Id> idSet) {
+        if (idSet == null || idSet.isEmpty()) {
+            return new List<Tourist__c>();
+        }
+        return [
+            SELECT Id, 
+            Active__c, 
+            (SELECT Id, Trip__r.Start_Date__c, Status__c FROM Flights__r)
+            FROM Tourist__c
+            WHERE Id IN :idSet
+        ];
+    }
+
+    public static List<Tourist__c> getWithoutFlights() {
+        return [
+            SELECT Name, 
+            Age__c
+            FROM Tourist__c
+            WHERE Id NOT IN (SELECT Tourist__c FROM Flight__c)
+            ORDER BY Name
+        ];
+    }
+
+    public static List<Tourist__c> getByDuplicateKeys(Set<String> duplicateKeys, Set<Id> exclusionId) {
         if (
             duplicateKeys == null ||
             duplicateKeys.isEmpty() ||
@@ -45,6 +64,19 @@ public class TouristManager {
             FROM Tourist__c
             WHERE Id NOT IN :exclusionId AND DuplicateKey__c IN :duplicateKeys
         ];
+    }
+
+    public static List<Tourist__c> getByNameAndAge(String name, Integer age) {
+        if (String.isEmpty(name) || age == null) {
+            return new List<Tourist__c>();
+        }
+        List<List<Tourist__c>> tourists = [
+            FIND :name
+            IN NAME FIELDS
+            RETURNING Tourist__c(Name, Age__c WHERE Age__c = :age)
+        ];
+
+        return tourists.get(0);
     }
 
     public static List<Tourist__c> getByNameBirthdayEmail(
