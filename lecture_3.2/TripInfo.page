@@ -1,0 +1,44 @@
+<apex:page standardController="Trip__c" extensions="TripInfoController" lightningStyleSheets="true">
+    <apex:pageBlock title="Trip Information">
+
+        <apex:pageBlockSection columns="1" title="General Information.">
+            <apex:outputField value="{!Trip__c.Name}" />
+            <apex:outputField value="{!Trip__c.Start_Date__c}" />
+            <apex:outputField value="{!Trip__c.Minimum_Age__c}" />
+            <apex:outputField value="{!Trip__c.OwnerId}" />
+            <apex:outputField value="{!Trip__c.CreatedDate}" />
+        </apex:pageBlockSection>
+
+        <apex:pageBlock>
+            <apex:form>
+                <apex:commandButton action="{!edit}" value="Edit trip" id="theButton" />
+            </apex:form>
+        </apex:pageBlock>
+
+        <apex:pageBlockSection columns="1" title="Flight Information.">
+            <apex:pageBlockTable value="{!Trip__c.Flights__r}" var="flight">
+                <apex:column value="{!flight.Name}" />
+                <apex:column value="{!flight.Status__c}" />
+                <apex:column value="{!flight.Trip__r.Start_Date__c}" />
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection columns="1" title="Tourist Information.">
+            <apex:pageBlockTable value="{!Trip__c.Flights__r}" var="flight">
+                <apex:column value="{!flight.Tourist__r.Name}" />
+                <apex:column value="{!flight.Tourist__r.Birthday__c}" />
+                <apex:column value="{!flight.Tourist__r.Age__c}" />
+                <apex:column value="{!flight.Tourist__r.Email__c}" />
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+
+
+        <apex:pageBlockSection columns="1" title="Information about tourists who are not registered for this trip.">
+            <apex:pageBlockTable value="{!tourists}" var="tourist">
+                <apex:column value="{!tourist.Name}" />
+                <apex:column value="{!tourist.Upcoming_Flights_Count__c}" />
+            </apex:pageBlockTable>
+        </apex:pageBlockSection>
+
+    </apex:pageBlock>
+</apex:page>
