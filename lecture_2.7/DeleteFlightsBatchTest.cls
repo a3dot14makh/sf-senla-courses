@@ -1,6 +1,5 @@
 @IsTest
 private class DeleteFlightsBatchTest {
-    
     @TestSetup
     private static void setup(){
         List<Tourist__c> testTourists = TestDataFactory.createTourists(1);
@@ -27,7 +26,7 @@ private class DeleteFlightsBatchTest {
         
         List<Flight__c> flightFromDB = [SELECT Id, Status__c FROM Flight__c];
 
-        System.assertEquals(0, flightFromDB.size());
+        System.assertEquals(true, flightFromDB.isEmpty());
     }
 
     @IsTest
@@ -51,7 +50,7 @@ private class DeleteFlightsBatchTest {
         
         Flight__c flightFromDB = TestDataFactory.getTestFlightsById(flight.Id);
 
-        System.assert(flightFromDB != null);
+        System.assertNotEquals(null, flightFromDB);
     }
 
     @IsTest
@@ -75,6 +74,6 @@ private class DeleteFlightsBatchTest {
         
         Flight__c flightFromDB = TestDataFactory.getTestFlightsById(flight.Id);
 
-        System.assert(flightFromDB != null);
+        System.assertNotEquals(null, flightFromDB);
     }
 }
