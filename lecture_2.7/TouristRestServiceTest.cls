@@ -45,7 +45,7 @@ private class TouristRestServiceTest {
     private static void testGetTourists_ParametrAgeIsEmpty() {
         Tourist__c tourist = TestDataFactory.getAllTestTourists()[0];
         String name = tourist.Name;
-        String age;
+        String age = '';
 
         List<Id> fixedSearchResults = new List<Id>{ tourist.Id };
         Test.setFixedSearchResults(fixedSearchResults);

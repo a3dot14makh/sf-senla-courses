@@ -41,21 +41,17 @@ private class WeatherForecastServiceTest {
 
     @IsTest
     private static void testGetActualForecastsForSpacePoints_ResponseError() {
-        List<Space_Point__c> spacePoints = new List<Space_Point__c>{
-            new Space_Point__c(Name = 'Brest', Latitude__c = 52.05, Longitude__c = 23.72)
-        };
-        String expectedMessage = Constants.RESPONSE_STATUS_CODE_500 + ' ' + Constants.RESPONSE_STATUS_ERROR;
+        List<Space_Point__c> spacePoints = SpacePointManager.getAll();
 
         Test.setMock(HttpCalloutMock.class, new ErrorMockResponse());
 
         Test.startTest();
-        try {
-            List<Weather_Daily_Forecast__c> actualForecasts = WeatherForecastService.getActualForecastsForSpacePoints(
-                spacePoints
-            );
-        } catch (WeatherForecastService.WeatherForecastException ex) {
-            System.AssertEquals(expectedMessage, ex.getMessage());
-        }
+        List<Weather_Daily_Forecast__c> actualForecasts = WeatherForecastService.getActualForecastsForSpacePoints(
+            spacePoints
+        );
         Test.stopTest();
+
+        System.assertNotEquals(null, actualForecasts);
+        System.assertEquals(0, actualForecasts.size());
     }
 }

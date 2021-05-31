@@ -14,9 +14,17 @@ global with sharing class TouristRestService {
 
         try {
             validateRequestParams(name, ageString);
+
+            response.statusCode = Constants.RESPONSE_STATUS_CODE_200;
+            if (String.isEmpty(ageString)) {
+                response.responseBody = Blob.valueOf(JSON.serializePretty(TouristManager.getByName(name)));
+            } else {
+                response.responseBody = Blob.valueOf(
+                    JSON.serializePretty(TouristManager.getByNameAndAge(name, Integer.valueOf(ageString)))
+                );
+            }
         } catch (RestRequestValidationException ex) {
             response.statusCode = ex.getStatusCode();
-            String msg = ex.getMessage();
             response.responseBody = Blob.valueOf(ex.getMessage());
         } catch (Exception ex) {
             response.statusCode = Constants.RESPONSE_STATUS_CODE_500;
@@ -59,7 +67,7 @@ global with sharing class TouristRestService {
         }
         return tourists;
     }
-    
+
     private static void validateRequestParams(String name, String ageString) {
         if (String.isEmpty(name)) {
             throw new RestRequestValidationException(
@@ -67,18 +75,7 @@ global with sharing class TouristRestService {
                 Constants.RESPONSE_BODY_PARAMETER_NAME_EMPTY
             );
         }
-        if (String.isEmpty(ageString)) {
-            throw new RestRequestValidationException(
-                Constants.RESPONSE_STATUS_CODE_200,
-                JSON.serializePretty(TouristManager.getByName(name))
-            );
-        }
-        if (ageString.isNumeric()) {
-            throw new RestRequestValidationException(
-                Constants.RESPONSE_STATUS_CODE_200,
-                JSON.serializePretty(TouristManager.getByNameAndAge(name, Integer.valueOf(ageString)))
-            );
-        } else {
+        if (!(ageString.isNumeric() || String.isEmpty(ageString))) {
             throw new RestRequestValidationException(
                 Constants.RESPONSE_STATUS_CODE_404,
                 Constants.RESPONSE_BODY_PARAMETER_AGE_NOT_INTEGER
