@@ -3,8 +3,7 @@ private class FlightTriggerTest {
     private static Tourist__c tourist;
 
     static {
-        tourist = TestDataFactory.createTouristsByBirthday(Date.newInstance(1974, 6, 13));
-        insert tourist;
+        tourist = TestDataFactory.createTourists(1)[0];
     }
 
     @IsTest
@@ -46,7 +45,7 @@ private class FlightTriggerTest {
         Test.stopTest();
 
         System.assertEquals(false, resultInsert.isSuccess());
-        System.assert(resultInsert.getErrors().size() > 0);
+        System.assertEquals(false, resultInsert.getErrors().isEmpty());
         System.assertEquals(
             Constants.NEW_FLIGHT_VALIDATION_ERROR_TRIP_START_DATE,
             resultInsert.getErrors()[0].getMessage()
@@ -69,7 +68,7 @@ private class FlightTriggerTest {
         Test.stopTest();
 
         System.assertEquals(false, resultInsert.isSuccess());
-        System.assert(resultInsert.getErrors().size() > 0);
+        System.assertEquals(false, resultInsert.getErrors().isEmpty());
         System.assertEquals(
             Constants.NEW_FLIGHT_VALIDATION_ERROR_TOURIST_AGE,
             resultInsert.getErrors()[0].getMessage()

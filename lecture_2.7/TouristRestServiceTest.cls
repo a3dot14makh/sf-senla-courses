@@ -1,12 +1,9 @@
 @IsTest
 private class TouristRestServiceTest {
-    private static final String REQUEST_PARAM_FUZZYNAME = 'fuzzyname';
-    private static final String REQUEST_PARAM_AGE = 'age';
-
+    
     @TestSetup
     static void setup() {
-        Tourist__c tourist = TestDataFactory.createTouristsByBirthday(Date.newInstance(1974, 6, 13));
-        insert tourist;
+        List<Tourist__c> tourists = TestDataFactory.createTourists(1);
     }
 
     @IsTest
@@ -26,6 +23,8 @@ private class TouristRestServiceTest {
         );
 
         System.assertEquals(Constants.RESPONSE_STATUS_CODE_200, response.statusCode);
+        System.assertNotEquals(null, dataTourist);
+        System.assertEquals(1, dataTourist.size());
         System.assertEquals(tourist.Id, dataTourist[0].Id);
         System.assertEquals(name, dataTourist[0].Name);
     }
@@ -59,6 +58,8 @@ private class TouristRestServiceTest {
         );
 
         System.assertEquals(Constants.RESPONSE_STATUS_CODE_200, response.statusCode);
+        System.assertNotEquals(null, dataTourist);
+        System.assertEquals(1, dataTourist.size());
         System.assertEquals(tourist.Id, dataTourist[0].Id);
         System.assertEquals(name, dataTourist[0].Name);
     }
@@ -99,7 +100,8 @@ private class TouristRestServiceTest {
         List<Tourist__c> tourists = TestDataFactory.getAllTestTourists();
 
         System.assertEquals(Constants.RESPONSE_STATUS_CODE_200, response.statusCode);
-        System.assert(tourists.size() == 3);
+        System.assertNotEquals(null, tourists);
+        System.assertEquals(3, tourists.size());
         System.assertEquals(recordFirstTourist.name, tourists[1].Name);
         System.assertEquals(recordSecondTourist.name, tourists[2].Name);
     }
@@ -121,15 +123,16 @@ private class TouristRestServiceTest {
 
         System.assertEquals(Constants.RESPONSE_STATUS_CODE_409, response.statusCode);
         System.assertEquals(Constants.RESPONSE_BODY_RECORDS_EXISTS, response.responseBody.toString());
-        System.assert(tourists.size() == 1);
+        System.assertNotEquals(null, tourists);
+        System.assertEquals(1, tourists.size());
         System.assertEquals(tourist.Id, tourists[0].Id);
     }
 
     private static System.RestResponse getResponse(String name, String age) {
         RestRequest req = new RestRequest();
         RestResponse res = new RestResponse();
-        req.addParameter(REQUEST_PARAM_FUZZYNAME, name);
-        req.addParameter(REQUEST_PARAM_AGE, age);
+        req.addParameter(TouristRestService.REQUEST_PARAM_FUZZYNAME, name);
+        req.addParameter(TouristRestService.REQUEST_PARAM_AGE, age);
 
         RestContext.request = req;
         RestContext.response = res;

@@ -43,6 +43,7 @@ private class TouristTriggerTest {
     @IsTest
     private static void testEventAfterUpdate_FutureTrip() {
         Tourist__c tourist = TestDataFactory.getAllTestTourists()[0];
+
         Trip__c trip = TestDataFactory.createTrip(18, System.today().addMonths(1));
         insert trip;
 
@@ -53,6 +54,7 @@ private class TouristTriggerTest {
         );
         insert flight;
 
+        TouristTriggerHandler.wasExecuted = false;
         tourist.Active__c = false;
 
         Test.startTest();

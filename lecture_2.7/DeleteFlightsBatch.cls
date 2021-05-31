@@ -25,8 +25,8 @@ public class DeleteFlightsBatch implements Database.Batchable<sObject>, Database
         for (Flight__c flight : scope) {
             touristsBeforeSorting.add(flight.Tourist__r);
             if (resultMap.containsKey(flight.Tourist__r.Id)) {
-                Integer i = resultMap.get(flight.Tourist__r.Id);
-                resultMap.put(flight.Tourist__r.Id, i + 1);
+                Integer numRemoteFlights = resultMap.get(flight.Tourist__r.Id);
+                resultMap.put(flight.Tourist__r.Id, numRemoteFlights + 1);
             } else {
                 resultMap.put(flight.Tourist__r.Id, 1);
             }

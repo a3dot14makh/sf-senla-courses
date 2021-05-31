@@ -1,6 +1,8 @@
 @RestResource(urlMapping='/Tourist/*')
 global with sharing class TouristRestService {
+    @TestVisible
     private static final String REQUEST_PARAM_FUZZYNAME = 'fuzzyname';
+    @TestVisible
     private static final String REQUEST_PARAM_AGE = 'age';
 
     @HttpGet

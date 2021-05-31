@@ -5,7 +5,7 @@ public class TestDataFactory {
         Date minDate = Date.newInstance(1969, 9, 4);
         List<Tourist__c> tourists = new List<Tourist__c>();
         for (Integer i = 0; i < numToCreate; i++) {
-            Decimal randomNum = 100 * math.Random();
+            Decimal randomNum = 100 * Math.random();
             tourists.add(
                 new Tourist__c(
                     Name = 'Liudovik ' + i,
@@ -16,16 +16,6 @@ public class TestDataFactory {
         }
         insert tourists;
         return tourists;
-    }
-
-    public static Tourist__c createTouristsByBirthday(Date birthday) {
-        Tourist__c tourist = new Tourist__c(
-            Name = 'Gedimin',
-            Birthday__c = birthday,
-            Email__c = 'kniaz@mail.vkl'
-        );
-
-        return tourist;
     }
 
     public static Trip__c createTrip(Integer minimumAge, Date startDate) {

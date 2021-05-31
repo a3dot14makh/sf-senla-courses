@@ -36,6 +36,8 @@ private class TouristManagerTest {
 
         List<Tourist__c> touristsFromDB = TouristManager.getByName(tourists[0].Name);
 
+        System.assertNotEquals(null, touristsFromDB);
+        System.assertEquals(1, touristsFromDB.size());
         System.assertEquals(tourists[0].Id, touristsFromDB[0].Id);
         System.assertEquals(tourists[0].Name, touristsFromDB[0].Name);
         System.assertEquals(tourists[0].Age__c, touristsFromDB[0].Age__c);
@@ -66,6 +68,7 @@ private class TouristManagerTest {
         exclusionId.remove(tourists[0].Id);
         List<Tourist__c> touristFromDB = TouristManager.getByDuplicateKeys(duplicateKeys, exclusionId);
 
+        System.assertNotEquals(null, touristsFromDB);
         System.assertEquals(1, touristFromDB.size());
         System.assertEquals(tourists[0].DuplicateKey__c, touristFromDB[0].DuplicateKey__c);
     }
@@ -87,9 +90,9 @@ private class TouristManagerTest {
     @IsTest
     private static void testGetByDuplicateKeys_Null() {
         List<Tourist__c> tourists = TestDataFactory.getAllTestTourists();
-        Set<String> duplicateKeys = new Set<String>{tourists[0].DuplicateKey__c};
-        Set<Id> exclusionId = new Set<Id>{tourists[0].Id};
-        
+        Set<String> duplicateKeys = new Set<String>{ tourists[0].DuplicateKey__c };
+        Set<Id> exclusionId = new Set<Id>{ tourists[0].Id };
+
         System.assertEquals(true, TouristManager.getByDuplicateKeys(null, exclusionId).isEmpty());
         System.assertEquals(true, TouristManager.getByDuplicateKeys(duplicateKeys, null).isEmpty());
         System.assertEquals(true, TouristManager.getByDuplicateKeys(null, null).isEmpty());
@@ -98,36 +101,23 @@ private class TouristManagerTest {
     @IsTest
     private static void testGetByDuplicateKeys_Empty() {
         List<Tourist__c> tourists = TestDataFactory.getAllTestTourists();
-        Set<String> duplicateKeys = new Set<String>{tourists[0].DuplicateKey__c};
-        Set<Id> exclusionId = new Set<Id>{tourists[0].Id};
+        Set<String> duplicateKeys = new Set<String>{ tourists[0].DuplicateKey__c };
+        Set<Id> exclusionId = new Set<Id>{ tourists[0].Id };
 
         Set<String> duplicateKeysEmpty = new Set<String>();
         Set<Id> exclusionIdEmpty = new Set<Id>();
-        
-        System.assertEquals(true, TouristManager.getByDuplicateKeys(duplicateKeysEmpty, exclusionId).isEmpty());
-        System.assertEquals(true, TouristManager.getByDuplicateKeys(duplicateKeys, exclusionIdEmpty).isEmpty());
-        System.assertEquals(true, TouristManager.getByDuplicateKeys(duplicateKeysEmpty, exclusionIdEmpty).isEmpty());
+
+        System.assertEquals(
+            true,
+            TouristManager.getByDuplicateKeys(duplicateKeysEmpty, exclusionId).isEmpty()
+        );
+        System.assertEquals(
+            true,
+            TouristManager.getByDuplicateKeys(duplicateKeys, exclusionIdEmpty).isEmpty()
+        );
+        System.assertEquals(
+            true,
+            TouristManager.getByDuplicateKeys(duplicateKeysEmpty, exclusionIdEmpty).isEmpty()
+        );
     }
-
-    /* @IsTest
-    private static void testGetByNameBirthdayEmail() {
-        Set<String> names = new Set<String>();
-        Set<Date> birthdays = new Set<Date>();
-        Set<String> emails = new Set<String>();
-        System.assert(TouristManager.getByNameBirthdayEmail(names, birthdays, emails).isEmpty());
-        System.assert(TouristManager.getByNameBirthdayEmail(null, null, null).isEmpty());
-        List<Tourist__c> tourists = TestDataFactory.createTourists(NUMBER_OF_CREATED_TOURISTS);
-
-        for (Tourist__c tourist : tourists) {
-            names.add(tourist.Name);
-            birthdays.add(tourist.Birthday__c);
-            emails.add(tourist.Email__c);
-        }
-        List<Tourist__c> touristsFromDB = TouristManager.getByNameBirthdayEmail(names, birthdays, emails);
-        System.assertEquals(NUMBER_OF_CREATED_TOURISTS, touristsFromDB.size());
-
-        for (Tourist__c tourist : touristsFromDB) {
-            System.assertEquals(true, touristsFromDB.contains(tourist));
-        }
-    } */
 }
