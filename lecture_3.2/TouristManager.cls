@@ -6,7 +6,7 @@ public class TouristManager {
             Upcoming_Flights_Count__c
             FROM Tourist__c
             WHERE Id NOT IN (SELECT Tourist__c FROM Flight__c WHERE Trip__c = :tripId)
-            ORDER BY Name ASC
+            ORDER BY Upcoming_Flights_Count__c ASC
             LIMIT 10
         ];
     }
