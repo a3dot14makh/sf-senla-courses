@@ -1,0 +1,80 @@
+<aura:component
+    controller="TableSuitableTouristsForTripController"
+    implements="flexipage:availableForRecordHome,force:hasRecordId"
+    access="global"
+>
+    <aura:attribute name="recordId" type="Id" access="public" />
+    <aura:attribute name="trip" type="Trip__c" access="public" />
+    <aura:attribute name="tourists" type="List" access="public" />
+    <aura:attribute name="columns" type="List" access="public" />
+    <aura:attribute name="showSpinner" type="Boolean" default="true" access="public" />
+    <aura:attribute name="showDataTable" type="Boolean" default="false" access="public" />
+    <aura:attribute name="showModals" type="Boolean" default="false" access="public" />
+    <aura:attribute name="showButtonAddToTrip" type="Boolean" default="false" access="public" />
+
+    <aura:handler name="change" value="{!v.showDataTable}" action="{!c.displayData}" />
+    <aura:handler
+        name="closeConfirmationScreen"
+        event="c:confirmationScreenClick"
+        action="{!c.closeConfirmationScreen}"
+    />
+
+    <force:recordData
+        aura:id="tripRecord"
+        recordId="{!v.recordId}"
+        fields="Id,Number_Of_Empty_Seats__c,Start_Date__c,End_Date__c,Minimum_Age__c"
+        targetFields="{!v.trip}"
+        recordUpdated="{!c.onTripLoaded}"
+    />
+
+    <aura:if isTrue="{!v.showDataTable}">
+        <lightning:card
+            iconName="utility:list"
+            title="{!$Label.c.Card_SuitableTourists}"
+            footer="{!$Label.c.FooterCard_SuitableTourists + '  ' + v.trip.Number_Of_Empty_Seats__c}"
+        >
+            <aura:set attribute="actions">
+                <lightning:button
+                    variant="brand"
+                    label="{! $Label.c.Button_AddToTrip}"
+                    onclick="{!c.handleAddTripClick}"
+                    disabled="{!not(v.showButtonAddToTrip)}"
+                />
+            </aura:set>
+
+            <aura:if isTrue="{!v.showSpinner}">
+                <lightning:spinner variant="brand" size="small" />
+            </aura:if>
+
+            <p class="slds-clearfix slds-p-horizontal_small">
+                <lightning:datatable
+                    aura:id="suitableTourists"
+                    data="{!v.tourists}"
+                    columns="{!v.columns}"
+                    keyField="Id"
+                    maxRowSelection="{!v.trip.Number_Of_Empty_Seats__c}"
+                    onrowselection="{!c.handleRowSelection}"
+                    hideCheckboxColumn="false"
+                />
+            </p>
+        </lightning:card>
+
+        <aura:set attribute="else">
+            <article class="slds-card">
+                <div class="slds-card__body slds-card__body_inner slds-text-heading_small">
+                    <lightning:icon iconName="utility:list" size="small" />
+                    <span class="slds-text-heading_small slds-var-p-left_xx-small">
+                        {!$Label.c.InfoMsg_SuitableTourists}
+                    </span>
+                </div>
+            </article>
+        </aura:set>
+    </aura:if>
+
+    <aura:if isTrue="{!v.showModals}">
+        <c:confirmationScreen
+            title="{!$Label.c.Button_AddToTrip}"
+            message="{!$Label.c.ModalBody_SuitableTourists}"
+        />
+    </aura:if>
+</aura:component>

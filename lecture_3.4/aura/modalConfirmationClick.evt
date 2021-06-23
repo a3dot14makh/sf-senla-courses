@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" >
+    <aura:attribute name="schowConfirmationsfgsdgsgsdgsgsScreen" type="Boolean" />
+</aura:event>
