@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="Trip Select">
+    <aura:attribute name="tripId" type="String" />
+</aura:event>

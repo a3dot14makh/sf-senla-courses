@@ -1,0 +1,47 @@
+<aura:component
+    controller="TouristAssignmentController"
+    implements="force:appHostable,flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes"
+    access="global"
+>
+    <aura:attribute name="touristId" type="Id" access="public" />
+    <aura:attribute name="trips" type="List" />
+    <aura:attribute name="backgroundImageURL" type="String" default="" access="public" />
+    <aura:attribute name="selectedTripId" type="Id" access="public" />
+    <aura:attribute name="showTripDetails" type="Boolean" default="false" access="public" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.trips}" action="{!c.tripsNull}" />
+    <aura:handler name="TripTileClick" event="c:TripSelect" action="{!c.onTripClick}" />
+    <aura:handler
+        name="RefreshSuitableTrips"
+        event="c:RefreshSearchResults"
+        action="{!c.refreshSuitableTrips}"
+    />
+
+    <div class="c-container">
+        <lightning:layout multipleRows="true">
+            <lightning:layoutItem size="8" class="slds-p-right_small slds-p-bottom_small">
+                <lightning:card iconName="utility:event" title="{!$Label.c.Suitable_Trips}">
+                    <lightning:layout multipleRows="true">
+                        <aura:iteration items="{!v.trips}" var="trip" indexVar="idx">
+                            <lightning:layoutItem
+                                size="3"
+                                class="slds-p-horizontal_small slds-p-bottom_small"
+                            >
+                                <c:TripTile trip="{!trip}" backgroundImageURL="{!v.backgroundImageURL}" />
+                            </lightning:layoutItem>
+                        </aura:iteration>
+                    </lightning:layout>
+                </lightning:card>
+            </lightning:layoutItem>
+
+            <lightning:layoutItem size="4" class="slds-p-bottom_small">
+                <c:TripDetails
+                    selectedTripId="{!v.selectedTripId}"
+                    touristId="{!v.touristId}"
+                    showTripDetails="{!v.showTripDetails}"
+                />
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+</aura:component>

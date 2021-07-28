@@ -1,0 +1,26 @@
+.THIS .tile {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 200px;
+    padding: 0px !important ;
+    margin-bottom: 5px;
+}
+
+.THIS .caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color: #ffffff;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 6px 8px;
+}
+
+.THIS .innertile {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+}

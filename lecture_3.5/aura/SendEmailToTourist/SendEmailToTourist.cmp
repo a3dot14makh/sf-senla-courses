@@ -1,0 +1,20 @@
+<aura:component
+    implements="force:lightningQuickActionWithoutHeader,force:hasRecordId"
+    controller="SendEmailToTouristController"
+>
+    <aura:attribute name="recordId" type="Id" access="public" />
+    <aura:attribute name="tourist" type="Tourist__c" access="public" />
+
+    <force:recordData
+        aura:id="touristData"
+        recordId="{#v.recordId}"
+        mode="VIEW"
+        fields="Id,Name,Email__c"
+        targetFields="{!v.tourist}"
+        recordUpdated="{!c.sendEmail}"
+    />
+
+    <div class="slds-align_absolute-center slds-text-color_success slds-text-heading_small">
+        {!$Label.c.InfoMsg_OfferTourist}
+    </div>
+</aura:component>

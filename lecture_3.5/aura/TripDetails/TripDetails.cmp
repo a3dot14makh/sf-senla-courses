@@ -1,0 +1,99 @@
+<aura:component
+    controller="TripDetailsController"
+    implements="flexipage:availableForAllPageTypes"
+    access="global"
+>
+    <aura:attribute name="selectedTripId" type="Id" access="public" />
+    <aura:attribute name="showTripDetails" type="Boolean" default="false" access="public" />
+    <aura:attribute name="touristId" type="Id" access="public" />
+    <aura:attribute name="trip" type="Trip__c" access="private" />
+    <aura:attribute name="mapMarkers" type="List" access="private" />
+    <aura:attribute name="currentTemperature" type="Decimal" access="private" />
+    <aura:attribute name="today" type="Date" access="private" />
+    <aura:attribute name="showModals" type="Boolean" default="false" access="private" />
+
+    <aura:registerEvent name="RefreshSuitableTrips" type="c:RefreshSearchResults" />
+
+    <aura:handler value="{!this}" name="init" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.selectedTripId}" action="{!c.refreshTripData}" />
+    <aura:handler
+        name="closeConfirmationScreen"
+        event="c:confirmationScreenClick"
+        action="{!c.closeConfirmationScreen}"
+    />
+
+    <force:recordData
+        aura:id="tripData"
+        recordId="{!v.selectedTripId}"
+        fields="Id,
+                    Name, 
+                    Minimum_Age__c,
+                    Start_Date__c,
+                    End_Date__c,
+                    Number_Of_Empty_Seats__c,
+                    Departure_Space_Point__c,
+                    Departure_Space_Point__r.Name,
+                    Departure_Space_Point__r.Latitude__c,
+                    Departure_Space_Point__r.Longitude__c"
+        targetFields="{!v.trip}"
+        recordUpdated="{!c.renderMap}"
+    />
+
+    <lightning:card iconName="custom:custom37" title="{!$Label.c.Trip_Details}">
+        <aura:set attribute="actions">
+            <lightning:button
+                variant="brand"
+                label="{!$Label.c.Submit}"
+                onclick="{!c.handleSubmitClick}"
+                disabled="{!not(v.showTripDetails)}"
+            />
+        </aura:set>
+
+        <aura:if isTrue="{!v.showTripDetails}">
+            <div class="slds-m-left_small slds-p-bottom_small">
+                <dl class="slds-dl_inline">
+                    <dt class="slds-dl_inline__label"><b>{!$Label.c.Name}:</b></dt>
+                    <dd class="slds-dl_inline__detail">{!v.trip.Name}</dd>
+                    <dt class="slds-dl_inline__label"><b>{!$Label.c.Start_Date}:</b></dt>
+                    <dd class="slds-dl_inline__detail">{!v.trip.Start_Date__c}</dd>
+                    <dt class="slds-dl_inline__label"><b>{!$Label.c.End_Date}:</b></dt>
+                    <dd class="slds-dl_inline__detail">{!v.trip.End_Date__c}</dd>
+                    <dt class="slds-dl_inline__label"><b>{!$Label.c.Empty_Seats}:</b></dt>
+                    <dd class="slds-dl_inline__detail">{!v.trip.Number_Of_Empty_Seats__c}</dd>
+                    <dt class="slds-dl_inline__label"><b>{!$Label.c.Minimum_Age}:</b></dt>
+                    <dd class="slds-dl_inline__detail">{!v.trip.Minimum_Age__c}</dd>
+                    <dt class="slds-dl_inline__label"><b>{!$Label.c.Departure_Space_Point}:</b></dt>
+                    <dd class="slds-dl_inline__detail">{!v.trip.Departure_Space_Point__r.Name}</dd>
+                </dl>
+            </div>
+
+            <aura:set attribute="else">
+                <p class="slds-align_absolute-center slds-text-color_weak">{!$Label.c.InfoMsg_TripDetails}</p>
+            </aura:set>
+        </aura:if>
+    </lightning:card>
+
+    <aura:if isTrue="{!v.showTripDetails}">
+        <lightning:card iconName="standard:address" title="{!$Label.c.Space_Point_location}">
+            <aura:set attribute="footer">
+                <div class="slds-align_absolute-center">
+                    <dl class="slds-dl_inline">
+                        <dt class="slds-dl_inline__label">
+                            {!$Label.c.Temperature_for_Today + ', ' + v.today + ' :'}
+                        </dt>
+                        <dd class="slds-dl_inline__detail"><b>{!v.currentTemperature + ' °C'}</b></dd>
+                    </dl>
+                </div>
+            </aura:set>
+
+            <lightning:map mapMarkers="{! v.mapMarkers }" zoomLevel="10" />
+        </lightning:card>
+    </aura:if>
+
+    <aura:if isTrue="{!v.showModals}">
+        <c:ConfirmationScreen
+            title="{!$Label.c.Confirmation}"
+            message="{!$Label.c.ModalBody_ConfirmationTrip}"
+        />
+    </aura:if>
+</aura:component>

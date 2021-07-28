@@ -1,0 +1,15 @@
+<aura:component>
+    <aura:attribute name="trip" type="Trip__c" access="public" />
+    <aura:attribute name="backgroundImageURL" type="String" default="" access="public" />
+
+    <aura:registerEvent name="TripTileClick" type="c:TripSelect" />
+
+    <lightning:button class="tile" onclick="{!c.onTripClick}">
+        <div
+            style="{!'background:' + v.backgroundColor + ' url(' + v.backgroundImageURL + '/' + v.trip.Name + '.jpg' + ') no-repeat;background-position: center;background-size: cover;'}"
+            class="innertile"
+        >
+            <p class="slds-truncate caption" title="{!v.trip.Name}">{!v.trip.Name }</p>
+        </div>
+    </lightning:button>
+</aura:component>
